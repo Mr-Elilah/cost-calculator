@@ -7,13 +7,19 @@ import {
 import IngredientRow from "./IngredientRow";
 import { AddIngredientForm } from "./AddIngredientForm";
 
-export function IngredientList() {
+interface Props {
+  onChange?: (ingredients: Ingredient[]) => void; // добавляем пропс
+}
+
+export function IngredientList({ onChange }: Props) {
   const [ingredients, setIngredients] =
     useState<Ingredient[]>(loadIngredients());
 
+  // Синхронизируем с локалсторедж и поднимаем изменения наверх
   function sync(next: Ingredient[]) {
     setIngredients(next);
     saveIngredients(next);
+    if (onChange) onChange(next);
   }
 
   function addIngredient(ingredient: Ingredient) {

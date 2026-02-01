@@ -7,7 +7,8 @@ export type IngredientName =
   | "Малина"
   | "Гранат"
   | "Банан"
-  | "Орехи";
+  | "Орехи"
+  | (string & {});
 
 export interface Ingredient {
   id: string;
