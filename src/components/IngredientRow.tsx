@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { Ingredient, IngredientUnit } from "../domain/models";
 
 interface IngredientRowProps {
@@ -7,35 +7,26 @@ interface IngredientRowProps {
   onDelete: (id: string) => void;
 }
 
-const IngredientRow: React.FC<IngredientRowProps> = ({
+export default function IngredientRow({
   ingredient,
   onChange,
   onDelete,
-}) => {
-  // Локальный state для input, чтобы не мешал пользователю
-  const [amountInput, setAmountInput] = useState<string>(
-    ingredient.amount > 0 ? ingredient.amount.toString() : "",
-  );
-  const [priceInput, setPriceInput] = useState<string>(
-    ingredient.price > 0 ? ingredient.price.toString() : "",
-  );
+}: IngredientRowProps) {
+  const [amountInput, setAmountInput] = useState(ingredient.amount.toString());
+  const [priceInput, setPriceInput] = useState(ingredient.price.toString());
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setAmountInput(value);
     const num = Number(value);
-    if (!isNaN(num) && num >= 0) {
-      onChange({ ...ingredient, amount: num });
-    }
+    if (!isNaN(num) && num >= 0) onChange({ ...ingredient, amount: num });
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPriceInput(value);
     const num = Number(value);
-    if (!isNaN(num) && num >= 0) {
-      onChange({ ...ingredient, price: num });
-    }
+    if (!isNaN(num) && num >= 0) onChange({ ...ingredient, price: num });
   };
 
   const handleUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -81,6 +72,4 @@ const IngredientRow: React.FC<IngredientRowProps> = ({
       </button>
     </div>
   );
-};
-
-export default IngredientRow;
+}

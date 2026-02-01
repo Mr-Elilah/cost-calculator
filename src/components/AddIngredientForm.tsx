@@ -61,7 +61,6 @@ export function AddIngredientForm({ onAdd }: Props) {
 
   return (
     <div className="flex gap-2 items-end flex-wrap mt-2">
-      {/* Кастомный селект */}
       <div className="relative" ref={containerRef}>
         <div
           onFocus={() => setIsOpen(true)}
@@ -95,7 +94,6 @@ export function AddIngredientForm({ onAdd }: Props) {
         )}
       </div>
 
-      {/* Количество */}
       <Input
         type="number"
         placeholder="Количество"
@@ -104,7 +102,6 @@ export function AddIngredientForm({ onAdd }: Props) {
         className="w-28"
       />
 
-      {/* Единицы */}
       <select
         className="border px-2 py-1 rounded"
         value={unit}
@@ -114,7 +111,6 @@ export function AddIngredientForm({ onAdd }: Props) {
         <option value="piece">шт</option>
       </select>
 
-      {/* Цена */}
       <Input
         type="number"
         placeholder="Цена(кг/шт)"

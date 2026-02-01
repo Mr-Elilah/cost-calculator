@@ -8,7 +8,6 @@ export function IngredientList() {
   return (
     <div className="space-y-4">
       <AddIngredientForm onAdd={add} />
-
       <div className="space-y-2">
         {ingredients.map((ingredient) => (
           <IngredientRow
