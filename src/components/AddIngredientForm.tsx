@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import type { Ingredient, IngredientUnit } from "../domain/models";
 import type { IngredientCatalog } from "../domain/ingredientsCatalog";
 import { INGREDIENTS_CATALOG } from "../domain/ingredientsCatalog";
+import Input from "../componentc/ui/Input";
 
 const USER_INGREDIENTS_KEY = "user-ingredients";
 
@@ -23,13 +24,11 @@ function loadInitialIngredients(): IngredientCatalog[] {
 }
 
 export function AddIngredientForm({ onAdd }: Props) {
-  const [allIngredients, setAllIngredients] = useState<IngredientCatalog[]>(
-    loadInitialIngredients,
-  );
+  const [allIngredients, setAllIngredients] = useState(loadInitialIngredients);
   const [selectedName, setSelectedName] = useState("");
   const [unit, setUnit] = useState<IngredientUnit>("gram");
-  const [amount, setAmount] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
+  const [amount, setAmount] = useState("");
+  const [price, setPrice] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +37,6 @@ export function AddIngredientForm({ onAdd }: Props) {
     i.name.toLowerCase().includes(selectedName.toLowerCase()),
   );
 
-  // Закрытие списка при клике вне
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) {
@@ -59,7 +57,7 @@ export function AddIngredientForm({ onAdd }: Props) {
     const amountNum = Number(amount);
     const priceNum = Number(price);
 
-    if (!selectedName.trim() || !amountNum || !priceNum) return;
+    if (!selectedName.trim() || amountNum <= 0 || priceNum <= 0) return;
 
     onAdd({
       id: crypto.randomUUID(),
@@ -69,18 +67,18 @@ export function AddIngredientForm({ onAdd }: Props) {
       price: priceNum,
     });
 
-    // Сохраняем новый ингредиент в localStorage если его нет в базовом списке
     if (!allIngredients.find((i) => i.name === selectedName.trim())) {
       const newIngredient: IngredientCatalog = {
         name: selectedName.trim(),
         unit,
       };
+
       const updated = [...allIngredients, newIngredient];
       setAllIngredients(updated);
 
       try {
         const userIngredients = updated.filter(
-          (i) => !INGREDIENTS_CATALOG.find((b) => b.name === i.name),
+          (i) => !INGREDIENTS_CATALOG.some((b) => b.name === i.name),
         );
         localStorage.setItem(
           USER_INGREDIENTS_KEY,
@@ -91,13 +89,12 @@ export function AddIngredientForm({ onAdd }: Props) {
       }
     }
 
-    // Сброс полей
     setSelectedName("");
     setAmount("");
     setPrice("");
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleAdd();
     }
@@ -106,16 +103,19 @@ export function AddIngredientForm({ onAdd }: Props) {
   return (
     <div className="flex gap-2 items-end flex-wrap mt-2">
       {/* Кастомный селект */}
-      <div className="relative w-40" ref={containerRef}>
-        <input
-          type="text"
-          value={selectedName}
+      <div className="relative" ref={containerRef}>
+        <div
           onFocus={() => setIsOpen(true)}
-          onChange={(e) => setSelectedName(e.target.value)}
+          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
           onKeyDown={handleKeyDown}
-          placeholder="Название ингредиента"
-          className="border px-2 py-1 w-full"
-        />
+        >
+          <Input
+            value={selectedName}
+            placeholder="Название ингредиента"
+            onChange={setSelectedName}
+          />
+        </div>
+
         {isOpen && (
           <ul className="absolute z-10 w-full max-h-40 overflow-auto border bg-white mt-1">
             {filtered.map((i) => (
@@ -137,17 +137,17 @@ export function AddIngredientForm({ onAdd }: Props) {
       </div>
 
       {/* Количество */}
-      <input
+      <Input
         type="number"
         placeholder="Количество"
-        className="border px-2 py-1 w-28 no-spin"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={setAmount}
+        className="w-28"
       />
 
-      {/* Селект единиц */}
+      {/* Единицы */}
       <select
-        className="border px-2 py-1"
+        className="border px-2 py-1 rounded"
         value={unit}
         onChange={(e) => setUnit(e.target.value as IngredientUnit)}
       >
@@ -156,12 +156,12 @@ export function AddIngredientForm({ onAdd }: Props) {
       </select>
 
       {/* Цена */}
-      <input
+      <Input
         type="number"
-        placeholder="Цена"
-        className="border px-2 py-1 w-28 no-spin"
+        placeholder="Цена(кг/шт)"
         value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        onChange={setPrice}
+        className="w-28"
       />
 
       <button

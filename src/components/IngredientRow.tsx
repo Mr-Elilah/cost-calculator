@@ -52,16 +52,16 @@ const IngredientRow: React.FC<IngredientRowProps> = ({
         value={amountInput}
         onChange={handleAmountChange}
         placeholder="Кол-во"
-        className="w-20 p-1 border rounded no-spin"
+        className="w-12 p-1 border rounded no-spin"
       />
 
       <select
         value={ingredient.unit}
         onChange={handleUnitChange}
-        className="w-20 p-1 border rounded"
+        className="w-12 p-1 border rounded"
       >
-        <option value="gram">грам</option>
-        <option value="piece">шт</option>
+        <option value="gram">г.</option>
+        <option value="piece">шт.</option>
       </select>
 
       <input
@@ -69,7 +69,7 @@ const IngredientRow: React.FC<IngredientRowProps> = ({
         value={priceInput}
         onChange={handlePriceChange}
         placeholder="Цена"
-        className="w-20 p-1 border rounded no-spin"
+        className="w-12 p-1 border rounded no-spin"
       />
       <span>Крон</span>
 
