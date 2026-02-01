@@ -1,9 +1,11 @@
 import { useEffect, useState, type FC, type ReactNode } from "react";
-import {
-  IngredientListContext,
-  type IngredientListContextValue,
-} from "../context/IngredientsListContext";
+import { IngredientListContext } from "../context/IngredientsListContext";
 import type { Ingredient, Work } from "../domain/models";
+import {
+  INGREDIENTS_CATALOG,
+  type IngredientCatalog,
+} from "../domain/ingredientsCatalog";
+import { loadCatalog, saveCatalog } from "../storage/ingredientsCatalogStorage";
 
 interface ProviderProps {
   children: ReactNode;
@@ -23,6 +25,15 @@ export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
     return saved ? JSON.parse(saved) : { minutes: 0, hourRate: 0 };
   });
 
+  const [customCatalog, setCustomCatalog] = useState<IngredientCatalog[]>(() =>
+    loadCatalog(),
+  );
+
+  const catalog: IngredientCatalog[] = [
+    ...INGREDIENTS_CATALOG,
+    ...customCatalog,
+  ];
+
   useEffect(() => {
     localStorage.setItem(INGREDIENTS_KEY, JSON.stringify(ingredients));
   }, [ingredients]);
@@ -31,16 +42,32 @@ export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
     localStorage.setItem(WORK_KEY, JSON.stringify(work));
   }, [work]);
 
-  const add = (ingredient: Ingredient) =>
+  const add = (ingredient: Ingredient) => {
     setIngredients((prev) => [...prev, ingredient]);
 
-  const update = (updated: Ingredient) =>
+    const exists = catalog.some(
+      (i) => i.name.toLowerCase() === ingredient.name.toLowerCase(),
+    );
+
+    if (!exists) {
+      const updated = [
+        ...customCatalog,
+        { name: ingredient.name, unit: ingredient.unit },
+      ];
+      setCustomCatalog(updated);
+      saveCatalog(updated);
+    }
+  };
+
+  const update = (updated: Ingredient) => {
     setIngredients((prev) =>
       prev.map((i) => (i.id === updated.id ? updated : i)),
     );
+  };
 
-  const remove = (id: string) =>
+  const remove = (id: string) => {
     setIngredients((prev) => prev.filter((i) => i.id !== id));
+  };
 
   const clear = () => {
     setIngredients([]);
@@ -49,18 +76,19 @@ export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
     localStorage.removeItem(WORK_KEY);
   };
 
-  const value: IngredientListContextValue = {
-    ingredients,
-    work,
-    add,
-    update,
-    remove,
-    setWork,
-    clear,
-  };
-
   return (
-    <IngredientListContext.Provider value={value}>
+    <IngredientListContext.Provider
+      value={{
+        ingredients,
+        work,
+        catalog,
+        add,
+        update,
+        remove,
+        setWork,
+        clear,
+      }}
+    >
       {children}
     </IngredientListContext.Provider>
   );

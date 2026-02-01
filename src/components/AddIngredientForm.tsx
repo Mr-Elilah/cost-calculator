@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import type { Ingredient, IngredientUnit } from "../domain/models";
-import { INGREDIENTS_CATALOG } from "../domain/ingredientsCatalog";
 import Input from "./ui/Input";
+import { useIngredientList } from "../hooks/useIngredientListContext";
 
 interface Props {
   onAdd: (ingredient: Ingredient) => void;
 }
 
 export function AddIngredientForm({ onAdd }: Props) {
+  const { catalog } = useIngredientList();
+
   const [selectedName, setSelectedName] = useState("");
   const [unit, setUnit] = useState<IngredientUnit>("gram");
   const [amount, setAmount] = useState("");
@@ -16,7 +18,7 @@ export function AddIngredientForm({ onAdd }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filtered = INGREDIENTS_CATALOG.filter((i) =>
+  const filtered = catalog.filter((i) =>
     i.name.toLowerCase().includes(selectedName.toLowerCase()),
   );
 
