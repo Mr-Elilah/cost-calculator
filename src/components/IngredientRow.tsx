@@ -1,5 +1,5 @@
-import React from "react";
-import type { Ingredient } from "../domain/models";
+import React, { useState } from "react";
+import type { Ingredient, IngredientUnit } from "../domain/models";
 
 interface IngredientRowProps {
   ingredient: Ingredient;
@@ -10,27 +10,75 @@ interface IngredientRowProps {
 const IngredientRow: React.FC<IngredientRowProps> = ({
   ingredient,
   onChange,
+  onDelete,
 }) => {
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    if (!isNaN(value)) {
-      onChange({ ...ingredient, amount: value });
+  // Локальный state для input, чтобы не мешал пользователю
+  const [amountInput, setAmountInput] = useState<string>(
+    ingredient.amount > 0 ? ingredient.amount.toString() : "",
+  );
+  const [priceInput, setPriceInput] = useState<string>(
+    ingredient.price > 0 ? ingredient.price.toString() : "",
+  );
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setAmountInput(value);
+    const num = Number(value);
+    if (!isNaN(num) && num >= 0) {
+      onChange({ ...ingredient, amount: num });
     }
   };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPriceInput(value);
+    const num = Number(value);
+    if (!isNaN(num) && num >= 0) {
+      onChange({ ...ingredient, price: num });
+    }
+  };
+
+  const handleUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const unit = e.target.value as IngredientUnit;
+    onChange({ ...ingredient, unit });
+  };
+
   return (
-    <div className="flex items-center gap-4 p-2 border-gray-200">
+    <div className="flex items-center gap-4 p-2 border-b border-gray-200">
       <span className="w-32">{ingredient.name}</span>
+
       <input
         type="number"
-        min={0}
-        value={ingredient.amount}
-        onChange={handleInputChange}
-        className="w-20 p-1 border rounded"
+        value={amountInput}
+        onChange={handleAmountChange}
+        placeholder="Кол-во"
+        className="w-20 p-1 border rounded no-spin"
       />
-      <span className="w-16 text-gray-600">
-        {ingredient.unit === "gram" ? "грам" : "штук"}
-      </span>
-      <span className="flex-1 text-right">{ingredient.price} Крон</span>
+
+      <select
+        value={ingredient.unit}
+        onChange={handleUnitChange}
+        className="w-20 p-1 border rounded"
+      >
+        <option value="gram">грам</option>
+        <option value="piece">шт</option>
+      </select>
+
+      <input
+        type="number"
+        value={priceInput}
+        onChange={handlePriceChange}
+        placeholder="Цена"
+        className="w-20 p-1 border rounded no-spin"
+      />
+      <span>Крон</span>
+
+      <button
+        onClick={() => onDelete(ingredient.id)}
+        className="text-red-500 font-bold px-2"
+      >
+        ✕
+      </button>
     </div>
   );
 };

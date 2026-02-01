@@ -1,6 +1,13 @@
-import type { IngredientName } from "./ingredientsCatalog";
-
 export type IngredientUnit = "gram" | "piece";
+
+export type IngredientName =
+  | "Шоколад"
+  | "Клубника"
+  | "Голубика"
+  | "Малина"
+  | "Гранат"
+  | "Банан"
+  | "Орехи";
 
 export interface Ingredient {
   id: string;
