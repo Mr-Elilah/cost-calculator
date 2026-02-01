@@ -1,5 +1,5 @@
 import type { Work } from "../domain/models";
-import Input from "../componentc/ui/Input";
+import Input from "./ui/Input";
 interface WorkBlockProps {
   work: Work;
   onChange: (updated: Work) => void;

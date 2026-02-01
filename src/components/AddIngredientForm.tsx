@@ -1,30 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { Ingredient, IngredientUnit } from "../domain/models";
-import type { IngredientCatalog } from "../domain/ingredientsCatalog";
 import { INGREDIENTS_CATALOG } from "../domain/ingredientsCatalog";
-import Input from "../componentc/ui/Input";
-
-const USER_INGREDIENTS_KEY = "user-ingredients";
+import Input from "./ui/Input";
 
 interface Props {
   onAdd: (ingredient: Ingredient) => void;
 }
 
-function loadInitialIngredients(): IngredientCatalog[] {
-  try {
-    const raw = localStorage.getItem(USER_INGREDIENTS_KEY);
-    if (raw) {
-      const userIngredients: IngredientCatalog[] = JSON.parse(raw);
-      return [...INGREDIENTS_CATALOG, ...userIngredients];
-    }
-  } catch {
-    console.warn("Не удалось загрузить пользовательские ингредиенты");
-  }
-  return INGREDIENTS_CATALOG;
-}
-
 export function AddIngredientForm({ onAdd }: Props) {
-  const [allIngredients, setAllIngredients] = useState(loadInitialIngredients);
   const [selectedName, setSelectedName] = useState("");
   const [unit, setUnit] = useState<IngredientUnit>("gram");
   const [amount, setAmount] = useState("");
@@ -33,7 +16,7 @@ export function AddIngredientForm({ onAdd }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filtered = allIngredients.filter((i) =>
+  const filtered = INGREDIENTS_CATALOG.filter((i) =>
     i.name.toLowerCase().includes(selectedName.toLowerCase()),
   );
 
@@ -67,37 +50,13 @@ export function AddIngredientForm({ onAdd }: Props) {
       price: priceNum,
     });
 
-    if (!allIngredients.find((i) => i.name === selectedName.trim())) {
-      const newIngredient: IngredientCatalog = {
-        name: selectedName.trim(),
-        unit,
-      };
-
-      const updated = [...allIngredients, newIngredient];
-      setAllIngredients(updated);
-
-      try {
-        const userIngredients = updated.filter(
-          (i) => !INGREDIENTS_CATALOG.some((b) => b.name === i.name),
-        );
-        localStorage.setItem(
-          USER_INGREDIENTS_KEY,
-          JSON.stringify(userIngredients),
-        );
-      } catch {
-        console.warn("Не удалось сохранить пользовательский ингредиент");
-      }
-    }
-
     setSelectedName("");
     setAmount("");
     setPrice("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleAdd();
-    }
+    if (e.key === "Enter") handleAdd();
   };
 
   return (

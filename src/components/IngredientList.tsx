@@ -1,50 +1,21 @@
-import { useState } from "react";
-import type { Ingredient } from "../domain/models";
-import {
-  loadIngredients,
-  saveIngredients,
-} from "../storage/ingredientsStorage";
 import IngredientRow from "./IngredientRow";
 import { AddIngredientForm } from "./AddIngredientForm";
+import { useIngredientList } from "../hooks/useIngredientList";
 
-interface Props {
-  onChange?: (ingredients: Ingredient[]) => void; // добавляем пропс
-}
-
-export function IngredientList({ onChange }: Props) {
-  const [ingredients, setIngredients] =
-    useState<Ingredient[]>(loadIngredients());
-
-  // Синхронизируем с локалсторедж и поднимаем изменения наверх
-  function sync(next: Ingredient[]) {
-    setIngredients(next);
-    saveIngredients(next);
-    if (onChange) onChange(next);
-  }
-
-  function addIngredient(ingredient: Ingredient) {
-    sync([...ingredients, ingredient]);
-  }
-
-  function updateIngredient(updated: Ingredient) {
-    sync(ingredients.map((i) => (i.id === updated.id ? updated : i)));
-  }
-
-  function removeIngredient(id: string) {
-    sync(ingredients.filter((i) => i.id !== id));
-  }
+export function IngredientList() {
+  const { ingredients, add, update, remove } = useIngredientList();
 
   return (
     <div className="space-y-4">
-      <AddIngredientForm onAdd={addIngredient} />
+      <AddIngredientForm onAdd={add} />
 
       <div className="space-y-2">
         {ingredients.map((ingredient) => (
           <IngredientRow
             key={ingredient.id}
             ingredient={ingredient}
-            onChange={updateIngredient}
-            onDelete={removeIngredient}
+            onChange={update}
+            onDelete={remove}
           />
         ))}
       </div>

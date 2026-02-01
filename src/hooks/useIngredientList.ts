@@ -26,7 +26,7 @@ export function useIngredientList() {
 
   function clear() {
     ingredientList.clear();
-    setIngredients(ingredientList.getAll());
+    setIngredients([]);
   }
 
   return {
