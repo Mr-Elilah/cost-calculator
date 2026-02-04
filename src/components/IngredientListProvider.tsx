@@ -10,7 +10,13 @@ import { loadCatalog, saveCatalog } from "../storage/ingredientsCatalogStorage";
 interface ProviderProps {
   children: ReactNode;
 }
-
+import {
+  addIngredient,
+  updateIngredient,
+  removeIngredient,
+  mergeCatalogs,
+  addIngredientToCatalogIfMissing,
+} from "../helpers/ingredientHelpers";
 const INGREDIENTS_KEY = "ingredientsList";
 const WORK_KEY = "workBlock";
 
@@ -40,10 +46,7 @@ export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
 
   // ----------------------------
 
-  const catalog: IngredientCatalog[] = [
-    ...INGREDIENTS_CATALOG,
-    ...customCatalog,
-  ];
+  const catalog = mergeCatalogs(INGREDIENTS_CATALOG, customCatalog);
 
   useEffect(() => {
     localStorage.setItem(INGREDIENTS_KEY, JSON.stringify(ingredients));
@@ -53,31 +56,42 @@ export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
     localStorage.setItem(WORK_KEY, JSON.stringify(work));
   }, [work]);
 
-  const add = (ingredient: Ingredient) => {
-    setIngredients((prev) => [...prev, ingredient]);
+  // ---------------- actions ----------------
 
-    const exists = catalog.some(
-      (i) => i.name.toLowerCase() === ingredient.name.toLowerCase(),
+  const add = (ingredient: Ingredient) => {
+    setIngredients((prev) => addIngredient(prev, ingredient));
+
+    // const exists = catalog.some(
+    //   (i) => i.name.toLowerCase() === ingredient.name.toLowerCase(),
+    // );
+
+    // if (!exists) {
+    //   const updated = [
+    //     ...customCatalog,
+    //     { name: ingredient.name, unit: ingredient.unit },
+    //   ];
+    //   setCustomCatalog(updated);
+    //   saveCatalog(updated);
+    // }
+
+    const updatedCatalog = addIngredientToCatalogIfMissing(
+      customCatalog,
+      catalog,
+      ingredient,
     );
 
-    if (!exists) {
-      const updated = [
-        ...customCatalog,
-        { name: ingredient.name, unit: ingredient.unit },
-      ];
-      setCustomCatalog(updated);
-      saveCatalog(updated);
+    if (updatedCatalog !== customCatalog) {
+      setCustomCatalog(updatedCatalog);
+      saveCatalog(updatedCatalog);
     }
   };
 
   const update = (updated: Ingredient) => {
-    setIngredients((prev) =>
-      prev.map((i) => (i.id === updated.id ? updated : i)),
-    );
+    setIngredients((prev) => updateIngredient(prev, updated));
   };
 
   const remove = (id: string) => {
-    setIngredients((prev) => prev.filter((i) => i.id !== id));
+    setIngredients((prev) => removeIngredient(prev, id));
   };
 
   const clear = () => {
