@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import type { Ingredient, IngredientUnit } from "../domain/models";
 import Input from "./ui/Input";
-import { useIngredientList } from "../hooks/useIngredientListContext";
+import { useIngredientList } from "../hooks/useIngredientList";
 
 interface Props {
   onAdd: (ingredient: Ingredient) => void;
@@ -18,9 +18,11 @@ export function AddIngredientForm({ onAdd }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filtered = catalog.filter((i) =>
-    i.name.toLowerCase().includes(selectedName.toLowerCase()),
-  );
+  const filtered = useMemo(() => {
+    return catalog.filter((i) =>
+      i.name.toLowerCase().includes(selectedName.toLowerCase()),
+    );
+  }, [selectedName, catalog]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

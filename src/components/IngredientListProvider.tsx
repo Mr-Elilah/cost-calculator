@@ -14,20 +14,31 @@ interface ProviderProps {
 const INGREDIENTS_KEY = "ingredientsList";
 const WORK_KEY = "workBlock";
 
-export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
-  const [ingredients, setIngredients] = useState<Ingredient[]>(() => {
-    const saved = localStorage.getItem(INGREDIENTS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+function loadFromStorage<T>(key: string, fallback: T): T {
+  const raw = localStorage.getItem(key);
+  if (!raw) return fallback;
 
-  const [work, setWork] = useState<Work>(() => {
-    const saved = localStorage.getItem(WORK_KEY);
-    return saved ? JSON.parse(saved) : { minutes: 0, hourRate: 0 };
-  });
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
+  const [ingredients, setIngredients] = useState<Ingredient[]>(() =>
+    loadFromStorage<Ingredient[]>(INGREDIENTS_KEY, []),
+  );
+
+  const [work, setWork] = useState<Work>(() =>
+    loadFromStorage<Work>(WORK_KEY, { minutes: 0, hourRate: 0 }),
+  );
 
   const [customCatalog, setCustomCatalog] = useState<IngredientCatalog[]>(() =>
     loadCatalog(),
   );
+
+  // ----------------------------
 
   const catalog: IngredientCatalog[] = [
     ...INGREDIENTS_CATALOG,
