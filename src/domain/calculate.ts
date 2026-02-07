@@ -22,6 +22,16 @@ export function calculateWorkCost(work: Work): number {
   return (work.hourRate / 60) * work.minutes;
 }
 
+export function calculateRecommendedPrice(
+  ingredients: Ingredient[],
+  work: Work,
+): number {
+  const { ingredients: ingCost, work: workCost } = calculateCostBreakdown(
+    ingredients,
+    work,
+  );
+  return ingCost * 2 + workCost;
+}
 export interface CostBreakdown {
   ingredients: number;
   work: number;

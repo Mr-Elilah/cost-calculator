@@ -2,6 +2,7 @@ import { IngredientListProvider } from "./components/IngredientListProvider";
 import { IngredientList } from "./components/IngredientList";
 import { WorkBlock } from "./components/WorkBlock";
 import { ResultBlock } from "./components/ResultBlock";
+import RecommendedPrice from "./components/RecommendedPrice";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <IngredientList />
           <WorkBlock />
           <ResultBlock />
+          <RecommendedPrice />
         </div>
       </div>
     </IngredientListProvider>
