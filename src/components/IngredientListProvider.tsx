@@ -7,44 +7,31 @@ import {
   updateIngredient,
   removeIngredient,
 } from "../helpers/ingredientHelpers";
-
+import {
+  loadIngredients,
+  saveIngredients,
+  clearIngredients,
+} from "../storage/ingredientsStorage";
+import { loadWork, saveWork, clearWork } from "../storage/workStorage";
 interface ProviderProps {
   children: ReactNode;
 }
 
-const INGREDIENTS_KEY = "ingredientsList";
-const WORK_KEY = "workBlock";
-
-function loadFromStorage<T>(key: string, fallback: T): T {
-  const raw = localStorage.getItem(key);
-  if (!raw) return fallback;
-
-  try {
-    return JSON.parse(raw) as T;
-  } catch {
-    return fallback;
-  }
-}
-
 export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
-  const [ingredients, setIngredients] = useState<Ingredient[]>(() =>
-    loadFromStorage<Ingredient[]>(INGREDIENTS_KEY, []),
-  );
+  const [ingredients, setIngredients] = useState<Ingredient[]>(loadIngredients);
 
-  const [work, setWork] = useState<Work>(() =>
-    loadFromStorage<Work>(WORK_KEY, { minutes: 0, hourRate: 0 }),
-  );
+  const [work, setWork] = useState<Work>(loadWork);
 
   const { catalog, addCustomIngredient } = useCatalog();
-
-  // ----------------------------
+  
+  // ---------------- persistence ----------------
 
   useEffect(() => {
-    localStorage.setItem(INGREDIENTS_KEY, JSON.stringify(ingredients));
+    saveIngredients(ingredients);
   }, [ingredients]);
 
   useEffect(() => {
-    localStorage.setItem(WORK_KEY, JSON.stringify(work));
+    saveWork(work);
   }, [work]);
 
   // ---------------- actions ----------------
@@ -65,8 +52,8 @@ export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
   const clear = () => {
     setIngredients([]);
     setWork({ minutes: 0, hourRate: 0 });
-    localStorage.removeItem(INGREDIENTS_KEY);
-    localStorage.removeItem(WORK_KEY);
+    clearIngredients();
+    clearWork();
   };
 
   return (
@@ -85,4 +72,4 @@ export const IngredientListProvider: FC<ProviderProps> = ({ children }) => {
       {children}
     </IngredientListContext.Provider>
   );
-};
+};;
