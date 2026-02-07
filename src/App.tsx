@@ -13,7 +13,7 @@ export default function App() {
         />
         <div className="absolute inset-0 bg-white/75" />
         <div className=" relative z-4 p-4 max-w-2xl mx-auto">
-          <h1 className="text-4xl font-cursive mb-4 text-center">
+          <h1 className="text-3xl font-cursive mb-4 text-center">
             Калькулятор себестоимости
           </h1>
           <IngredientList />

@@ -35,7 +35,7 @@ export default function IngredientRow({
   };
 
   return (
-    <div className="flex items-center gap-2 p-2 border-b border-gray-200">
+    <div className="flex items-center gap-2 p-2 border-b border-gray-400">
       <span className=" w-62 text-xs md:text-base mr-auto">
         {ingredient.name}
       </span>

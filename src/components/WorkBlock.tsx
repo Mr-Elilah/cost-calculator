@@ -17,7 +17,7 @@ export function WorkBlock() {
   const workCost = ((work.minutes * work.hourRate) / 60 || 0).toFixed(2);
 
   return (
-    <div className="flex gap-1 items-end p-2 border border-gray-300 rounded mt-4 md:gap-10">
+    <div className="flex gap-1 items-end p-2 border border-gray-400 rounded mt-4 md:gap-10">
       <div className="flex flex-col">
         <label className="text-sm font-medium text-gray-700">
           Время работы (минуты)
