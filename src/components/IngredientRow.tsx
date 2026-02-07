@@ -15,18 +15,26 @@ export default function IngredientRow({
   const [amountInput, setAmountInput] = useState(ingredient.amount.toString());
   const [priceInput, setPriceInput] = useState(ingredient.price.toString());
 
+  function parsePositiveNumber(value: string, cb: (n: number) => void) {
+    const num = Number(value);
+
+    if (!Number.isNaN(num) && num >= 0) cb(num);
+  }
+
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setAmountInput(value);
-    const num = Number(value);
-    if (!isNaN(num) && num >= 0) onChange({ ...ingredient, amount: num });
+    parsePositiveNumber(value, (num) =>
+      onChange({ ...ingredient, amount: num }),
+    );
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPriceInput(value);
-    const num = Number(value);
-    if (!isNaN(num) && num >= 0) onChange({ ...ingredient, price: num });
+    parsePositiveNumber(value, (num) =>
+      onChange({ ...ingredient, price: num }),
+    );
   };
 
   const handleUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -46,12 +54,14 @@ export default function IngredientRow({
         onChange={handleAmountChange}
         placeholder="Кол-во"
         className="w-12 p-1 border rounded no-spin"
+        inputMode="numeric"
       />
 
       <select
         value={ingredient.unit}
         onChange={handleUnitChange}
         className="w-12 p-1 border rounded"
+        aria-label="unit"
       >
         <option value="gram">г.</option>
         <option value="piece">шт.</option>
@@ -63,12 +73,14 @@ export default function IngredientRow({
         onChange={handlePriceChange}
         placeholder="Цена"
         className="w-12 p-1 border rounded no-spin"
+        inputMode="numeric"
       />
       <span>Крн.</span>
 
       <button
         onClick={() => onDelete(ingredient.id)}
-        className="text-red-500 font-bold px-2 ml-auto"
+        className="text-red-500 font-bold px-2"
+        aria-label={`delete-${ingredient.name}`}
       >
         ✕
       </button>

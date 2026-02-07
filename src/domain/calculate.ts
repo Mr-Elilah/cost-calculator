@@ -26,11 +26,9 @@ export function calculateRecommendedPrice(
   ingredients: Ingredient[],
   work: Work,
 ): number {
-  const { ingredients: ingCost, work: workCost } = calculateCostBreakdown(
-    ingredients,
-    work,
-  );
-  return ingCost * 2 + workCost;
+  const indredientsTotal = calculateIngredientsTotal(ingredients);
+  const workCost = calculateWorkCost(work);
+  return roundMoney(indredientsTotal * 2 + workCost);
 }
 export interface CostBreakdown {
   ingredients: number;

@@ -60,17 +60,16 @@ export function AddIngredientForm({ onAdd }: Props) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") handleAdd();
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAdd();
+    }
   };
 
   return (
     <div className="flex gap-2 items-end flex-wrap mt-2">
       <div className="relative" ref={containerRef}>
-        <div
-          onFocus={() => setIsOpen(true)}
-          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-          onKeyDown={handleKeyDown}
-        >
+        <div onFocus={() => setIsOpen(true)} onKeyDown={handleKeyDown}>
           <Input
             value={selectedName}
             placeholder="Название ингредиента"
@@ -103,11 +102,11 @@ export function AddIngredientForm({ onAdd }: Props) {
         placeholder="Количество"
         value={amount}
         onChange={setAmount}
-        className="w-28"
+        className="w-24"
       />
 
       <select
-        className="border px-2 py-1 rounded"
+        className="border px-1 py-0.5 rounded"
         value={unit}
         onChange={(e) => setUnit(e.target.value as IngredientUnit)}
       >
@@ -120,10 +119,10 @@ export function AddIngredientForm({ onAdd }: Props) {
         placeholder="Цена(кг/шт)"
         value={price}
         onChange={setPrice}
-        className="w-28"
+        className="w-24"
       />
 
-      <Button onClick={handleAdd} variant="default">
+      <Button onClick={handleAdd} variant="default" className="md:ml-auto">
         Добавить
       </Button>
     </div>

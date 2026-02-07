@@ -13,19 +13,12 @@ export default function Button({
 }: ButtonProps) {
   const baseClasses = "px-4 py-1 rounded font-semibold transition duration-200";
 
-  let variantClasses = "";
-  switch (variant) {
-    case "default":
-      variantClasses =
-        "bg-black text-white px-4 py-1 rounded hover:bg-gray-700";
-      break;
-    case "optional":
-      variantClasses = "bg-gray-200 text-black hover:bg-gray-300";
-      break;
-    case "another":
-      variantClasses = "bg-red-500 text-white hover:bg-red-600";
-      break;
-  }
+  const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
+    default: "bg-black text-white hover:bg-gray-700",
+    optional: "bg-gray-200 text-black hover:bg-gray-300",
+    another: "bg-red-500 text-white hover:bg-red-600",
+  };
+  const variantClasses = variants[variant];
 
   return (
     <button

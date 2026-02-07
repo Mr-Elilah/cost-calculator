@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+RU:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Cost Calculator
 
-Currently, two official plugins are available:
+Небольшое веб-приложение для расчёта себестоимости продукта на основе ингредиентов и затраченного времени работы.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Проект создан как pet-project для практики React, TypeScript и базовой архитектуры приложения.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Назначение проекта
 
-## Expanding the ESLint configuration
+- Вести список ингредиентов
+- Указывать количество, единицы измерения и цену
+- Учитывать стоимость рабочего времени
+- Получать итоговую себестоимость и рекомендуемую цену
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Приложение может использоваться для:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- небольших домашних производств,
+- расчёта цены блюд / изделий,
+- учебных и демонстрационных целей.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Технологический стек
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Context API
+- localStorage (сохранение данных)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+EN:
+
+# Cost Calculator
+
+A small web application for calculating product cost based on ingredients and work time.
+
+This project was created as a pet project to practice React, TypeScript, and basic application architecture.
+
+## Project Purpose
+
+Manage a list of ingredients
+
+Specify quantity, units, and price
+
+Account for work time cost
+
+Calculate total cost and recommended price
+
+The application can be used for:
+
+small home production,
+
+pricing dishes or handmade products,
+
+learning and demonstration purposes.
+
+## Tech Stack
+
+React
+TypeScript
+Vite
+Tailwind CSS
+React Context API
+localStorage (data persistence)
