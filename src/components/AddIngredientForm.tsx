@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import type { Ingredient, IngredientUnit } from "../domain/models";
 import Input from "./ui/Input";
 import { useIngredientList } from "../hooks/useIngredientList";
-
+import Button from "./Button";
 interface Props {
   onAdd: (ingredient: Ingredient) => void;
 }
@@ -123,12 +123,9 @@ export function AddIngredientForm({ onAdd }: Props) {
         className="w-28"
       />
 
-      <button
-        onClick={handleAdd}
-        className="bg-black text-white px-4 py-1 rounded"
-      >
+      <Button onClick={handleAdd} variant="default">
         Добавить
-      </button>
+      </Button>
     </div>
   );
 }

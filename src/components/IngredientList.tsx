@@ -1,9 +1,10 @@
 import IngredientRow from "./IngredientRow";
 import { AddIngredientForm } from "./AddIngredientForm";
 import { useIngredientList } from "../hooks/useIngredientList";
+import Button from "./Button";
 
 export function IngredientList() {
-  const { ingredients, add, update, remove } = useIngredientList();
+  const { ingredients, add, update, remove, clear } = useIngredientList();
 
   return (
     <div className="space-y-4">
@@ -17,6 +18,13 @@ export function IngredientList() {
             onDelete={remove}
           />
         ))}
+        {ingredients.length > 0 && (
+          <div className=" flex mt-2">
+            <Button onClick={clear} variant="another" className="m-auto">
+              Сбросить
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
