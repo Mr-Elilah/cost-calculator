@@ -17,7 +17,7 @@ export function WorkBlock() {
   const workCost = ((work.minutes * work.hourRate) / 60 || 0).toFixed(2);
 
   return (
-    <div className="flex gap-4 items-end p-2 border border-gray-300 rounded mt-4">
+    <div className="flex gap-1 items-end p-2 border border-gray-300 rounded mt-4 md:gap-10">
       <div className="flex flex-col">
         <label className="text-sm font-medium text-gray-700">
           Время работы (минуты)
@@ -27,7 +27,7 @@ export function WorkBlock() {
           placeholder="Мин"
           value={work.minutes || ""}
           onChange={handleMinutesChange}
-          className="w-24"
+          className="w-20"
         />
       </div>
 
@@ -40,15 +40,17 @@ export function WorkBlock() {
           placeholder="Крон/час"
           value={work.hourRate || ""}
           onChange={handleRateChange}
-          className="w-24"
+          className="w-20"
         />
       </div>
 
       <div className="flex flex-col ml-auto">
-        <label className="text-sm font-medium text-gray-700">
+        <label className="text-sm font-medium text-gray-700 px-2 py-1">
           Стоимость работы
         </label>
-        <span className="px-2 py-1 w-28 font-semibold">{workCost} Крон</span>
+        <span className="px-2 py-1 w-26 font-semibold text-sm">
+          {workCost} Крон
+        </span>
       </div>
     </div>
   );

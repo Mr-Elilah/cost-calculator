@@ -10,11 +10,11 @@ export function ResultBlock() {
   } = calculateCostBreakdown(ingredients, work);
 
   return (
-    <div className="p-4 border bg-gray-50 shadow-sm rounded mt-4">
+    <div className="p-4 border bg-transparent shadow-sm rounded mt-4">
       <h2 className="text-lg font-semibold mb-2">Итоговая себестоимость</h2>
 
       <div className="flex justify-between mb-1">
-        <span>Себестоимость ингредиентов:</span>
+        <span>Ингредиенты:</span>
         <span>{ingCost.toFixed(2)} Крон</span>
       </div>
       <div className="flex justify-between mb-1">

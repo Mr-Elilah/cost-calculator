@@ -35,8 +35,10 @@ export default function IngredientRow({
   };
 
   return (
-    <div className="flex items-center gap-4 p-2 border-b border-gray-200">
-      <span className="w-32">{ingredient.name}</span>
+    <div className="flex items-center gap-2 p-2 border-b border-gray-200">
+      <span className=" w-62 text-xs md:text-base mr-auto">
+        {ingredient.name}
+      </span>
 
       <input
         type="number"
@@ -62,11 +64,11 @@ export default function IngredientRow({
         placeholder="Цена"
         className="w-12 p-1 border rounded no-spin"
       />
-      <span>Крон</span>
+      <span>Крн.</span>
 
       <button
         onClick={() => onDelete(ingredient.id)}
-        className="text-red-500 font-bold px-2"
+        className="text-red-500 font-bold px-2 ml-auto"
       >
         ✕
       </button>
